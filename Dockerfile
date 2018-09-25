@@ -44,6 +44,7 @@ RUN docker-php-ext-install \
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system
 
 RUN pecl install \
+    mysql \
     sqlsrv \
     pdo_sqlsrv \
     xdebug
