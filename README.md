@@ -7,6 +7,7 @@ This image includes all that so yours doesn't have to!
 Extensions:
 - gd
 - mcrypt
+- opcache
 - pdo
 - zip
 

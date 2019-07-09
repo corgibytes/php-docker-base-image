@@ -38,6 +38,7 @@ RUN docker-php-ext-install \
     gd \
     mcrypt \
     mysqli \
+    opcache \
     pdo \
     pdo_mysql \
     zip
@@ -48,6 +49,7 @@ RUN pecl install \
     sqlsrv \
     pdo_sqlsrv \
     xdebug
+
 RUN echo "extension=$(find /usr/local/lib/php/extensions/ -name sqlsrv.so)" > /usr/local/etc/php/conf.d/sqlsrv.ini
 RUN echo "extension=$(find /usr/local/lib/php/extensions/ -name pdo_sqlsrv.so)" > /usr/local/etc/php/conf.d/pdo_sqlsrv.ini
 RUN echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini
