@@ -1,6 +1,6 @@
-FROM php:7.1-apache
+FROM php:7.3-apache
 
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 RUN apt-get install -y apt-utils
 RUN apt-get install -y \
@@ -9,6 +9,7 @@ RUN apt-get install -y \
     gnupg \
     libmcrypt-dev \
     libpng-dev \
+    libzip-dev \
     locales \
     mariadb-client \
     postfix \
@@ -36,7 +37,6 @@ RUN . ~/.bashrc
 
 RUN docker-php-ext-install \
     gd \
-    mcrypt \
     mysqli \
     opcache \
     pdo \
