@@ -1,22 +1,24 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update
-RUN apt-get install -y apt-utils
-RUN apt-get install -y \
-    apt-transport-https \
-    curl \
-    gnupg \
-    libmcrypt-dev \
-    libpng-dev \
-    libzip-dev \
-    locales \
-    mariadb-client \
-    postfix \
-    unixodbc-dev \
-    unzip \
-    wget \
-    zlib1g-dev
+RUN apt-get update && \
+    apt-get install -y \
+        apt-transport-https \
+        apt-utils \
+        curl \
+        gnupg \
+        libmcrypt-dev \
+        libpng-dev \
+        libzip-dev \
+        locales \
+        mariadb-client \
+        postfix \
+        unixodbc-dev \
+        unzip \
+        wget \
+        zlib1g-dev
+
+ADD https://curl.haxx.se/ca/cacert.pem /etc/ssl/certs/mozilla.pem
 
 RUN cp /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled
 RUN service postfix start
@@ -45,13 +47,12 @@ RUN docker-php-ext-install \
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system
 
 RUN pecl install \
-    mysql \
-    sqlsrv \
-    pdo_sqlsrv \
+    pdo_sqlsrv-5.7.1preview \
+    sqlsrv-5.7.1preview \
     xdebug
 
-RUN echo "extension=$(find /usr/local/lib/php/extensions/ -name sqlsrv.so)" > /usr/local/etc/php/conf.d/sqlsrv.ini
 RUN echo "extension=$(find /usr/local/lib/php/extensions/ -name pdo_sqlsrv.so)" > /usr/local/etc/php/conf.d/pdo_sqlsrv.ini
+RUN echo "extension=$(find /usr/local/lib/php/extensions/ -name sqlsrv.so)" > /usr/local/etc/php/conf.d/sqlsrv.ini
 RUN echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini
 RUN echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini
 RUN echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
