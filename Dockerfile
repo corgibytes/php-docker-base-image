@@ -53,10 +53,14 @@ RUN pecl install \
 
 RUN echo "extension=$(find /usr/local/lib/php/extensions/ -name pdo_sqlsrv.so)" > /usr/local/etc/php/conf.d/pdo_sqlsrv.ini
 RUN echo "extension=$(find /usr/local/lib/php/extensions/ -name sqlsrv.so)" > /usr/local/etc/php/conf.d/sqlsrv.ini
+
 RUN echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini
 RUN echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini
 RUN echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
+
 RUN echo "short_open_tag=off" > /usr/local/etc/php/conf.d/php.ini
+RUN echo "post_max_size=32M" >> /usr/local/etc/php/conf.d/php.ini
+RUN echo "upload_max_filesize=32M" >> /usr/local/etc/php/conf.d/php.ini
 
 RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
 RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
