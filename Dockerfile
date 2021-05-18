@@ -50,6 +50,7 @@ RUN docker-php-ext-install \
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system
 
 RUN pecl install \
+    apcu \
     pdo_sqlsrv-5.9.0 \
     sqlsrv-5.9.0 \
     xdebug
