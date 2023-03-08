@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:8.2-apache
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
@@ -16,6 +16,7 @@ RUN apt-get update && \
         mariadb-client \
         nano \
         postfix \
+        unixodbc \
         unixodbc-dev \
         unzip \
         wget \
@@ -29,15 +30,16 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 RUN locale-gen
 
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-RUN curl https://packages.microsoft.com/config/debian/9/prod.list > /etc/apt/sources.list.d/mssql-release.list
+RUN curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list
 RUN apt-get update
 ENV ACCEPT_EULA=Y
 RUN apt-get install -y \
-    msodbcsql17 \
-    mssql-tools
+    msodbcsql18 \
+    mssql-tools18 \
+    libgssapi-krb5-2
 
-RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
-RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+RUN echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bash_profile
+RUN echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
 RUN . ~/.bashrc
 
 RUN docker-php-ext-install \
@@ -50,8 +52,8 @@ RUN docker-php-ext-install \
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system
 
 RUN pecl install \
-    pdo_sqlsrv-5.9.0 \
-    sqlsrv-5.9.0 \
+    sqlsrv-5.10.1 \
+    pdo_sqlsrv-5.10.1 \
     xdebug
 
 COPY php.ini /usr/local/etc/php/
